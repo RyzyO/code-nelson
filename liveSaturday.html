@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>Leaderboard</title>
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="assets/css/templatemo-lugx-gaming.css">
+  <link rel="stylesheet" href="assets/css/owl.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+  
+  <!-- Custom Leaderboard Styling -->
+  <style>
+    /* Use the same font-family as the rest of the site */
+    #data-table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+    }
+    /* Header row styling: dark background with uppercase, spaced text */
+    #data-table thead tr {
+      background-color: #2a2a2a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    /* Header and cell padding, with subtle borders */
+    #data-table th,
+    #data-table td {
+      padding: 12px 15px;
+      border: 1px solid #444;
+      text-align: center;
+    }
+    /* Zebra-striping for table rows */
+    #data-table tbody tr:nth-child(even) {
+      background-color: #333333;
+    }
+    #data-table tbody tr:nth-child(odd) {
+      background-color: #2e2e2e;
+    }
+    /* Hover effect for rows */
+    #data-table tbody tr:hover {
+      background-color: #555555;
+      cursor: pointer;
+    }
+    /* Refresh button styling to match modern aesthetics */
+    .refresh-button {
+      background: transparent;
+      border: none;
+      margin-bottom: 20px;
+      outline: none;
+      cursor: pointer;
+    }
+    .refresh-button img {
+      width: 40px;
+      height: 40px;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+              <img src="assets/images/logo.png" alt="" style="width: 158px;">
+            </a>
+            <!-- Menu -->
+            <ul class="nav">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="honour-roll.html" class="active">Honour Roll</a></li>
+              <li><a href="product-details.html">Product Details</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
+              <li><a href="#">Sign In</a></li>
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div class="page-heading header-text">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h3>SATURDAY LEADERBOARD</h3>
+          <span class="breadcrumb">Stableford Format</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <button class="refresh-button" onclick="location.reload();">
+        <img src="refresh.png" alt="Refresh">
+    </button>
+    <h2>Stableford</h2>
+    <table id="data-table">
+        <thead>
+            <tr id="header-row"></tr>
+        </thead>
+        <tbody id="data-rows"></tbody>
+    </table>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>Copyright &copy; 2025 Riley Oakes. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script type="text/javascript">
+    const sheetId = '1r9BoqxzH4PvahkPqF9yK0IoSDJsv4iOhUrQfm28k1qg'; // Google Sheet ID
+    const gid = '600147197'; // GID for the specific sheet/tab
+    
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+    
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            const json = JSON.parse(data.match(/google\.visualization\.Query\.setResponse\((.*)\);/)[1]);
+            const tableData = json.table.rows;
+    
+            // Set headers to: Rank, Name, Points, Front, Back, Through
+            const headers = json.table.cols.slice(1, 7).map((col, index) => {
+                switch(index) {
+                  case 0: return 'Rank';
+                  case 1: return 'Name';
+                  case 2: return 'Points';
+                  case 3: return 'Front';
+                  case 4: return 'Back';
+                  case 5: return 'Through';
+                  default: return col.label || 'Unknown';
+                }
+            });
+    
+            // Populate the header row
+            const headerRow = document.getElementById('header-row');
+            headers.forEach((header, index) => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                th.classList.add(`column-${String.fromCharCode(98 + index)}`);
+                headerRow.appendChild(th);
+            });
+    
+            // Sort the table data by the 'Rank' column (index 0) in ascending order
+            tableData.sort((a, b) => {
+                const rankA = a.c[1] ? a.c[1].v : '';
+                const rankB = b.c[1] ? b.c[1].v : '';
+    
+                const numA = parseInt(rankA, 10);
+                const numB = parseInt(rankB, 10);
+    
+                if (!isNaN(numA) && !isNaN(numB)) {
+                    return numA - numB; // Sort numbers
+                } else if (!isNaN(numA)) {
+                    return -1; // Numbers come before letters
+                } else if (!isNaN(numB)) {
+                    return 1; // Numbers come before letters
+                } else {
+                    return rankA.localeCompare(rankB); // Sort letters
+                }
+            });
+    
+            // Populate the table rows, skipping any with a rank of zero
+            const dataRows = document.getElementById('data-rows');
+            tableData.forEach((row, index) => {
+              const rankValue = row.c[1] ? row.c[1].v : 0;
+              if (parseInt(rankValue, 10) === 0) return;
+    
+              const tr = document.createElement('tr');
+              row.c.slice(1, 7).forEach((cell, i) => {
+                const td = document.createElement('td');
+                td.textContent = cell ? cell.v : '0';
+                td.classList.add(`column-${String.fromCharCode(98 + i)}`);
+                tr.appendChild(td);
+              });
+    
+              // Use Column C for player name
+              const playerName = row.c[2] ? row.c[2].v : `Player${index + 1}`;
+              tr.addEventListener('click', () => {
+                window.location.href = `scorecard.html?player=${encodeURIComponent(playerName)}`;
+              });
+    
+              dataRows.appendChild(tr);
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+  </script>
+  
+  <!-- Scripts -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/js/isotope.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/counter.js"></script>
+  <script src="assets/js/custom.js"></script>
+
+</body>
+</html>
