@@ -62,6 +62,14 @@
       text-align: center;
       min-width: 120px;
     }
+    /* Decrease table cell padding for mobile screens */
+@media (max-width: 768px) {
+  #scorecard-table th,
+  #scorecard-table td {
+    padding: 6px !important; /* or any smaller value you like */
+  }
+}
+
   </style>
 </head>
 <body>
@@ -106,15 +114,15 @@
 
   <div class="container">
     <!-- Stats header row -->
-    <div class="row" style="margin-bottom: 20px;">
+    <div class="row align-items-center py-3">
       <!-- Left side: Player name -->
-      <div class="col-md-6 d-flex align-items-center">
-        <h2 id="player-name" style="margin: 0;">Player Name</h2>
+      <div class="col-12 col-md-6 text-md-left">
+        <h2 id="player-name" class="m-0">Player Name</h2>
       </div>
       <!-- Right side: Stats card -->
-      <div class="col-md-6 d-flex justify-content-end align-items-center">
-        <div class="stats-card" style="margin: 0;">
-          <div><h3><span id="total-points">0</span></h3></div>
+      <div class="col-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-3 mt-md-0">
+        <div class="stats-card" style="padding: 15px 20px; border-radius: 10px;">
+          <div>Total Points: <span id="total-points">0</span></div>
           <div>Rank: <span id="player-rank">N/A</span></div>
         </div>
       </div>
