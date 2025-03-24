@@ -20,7 +20,7 @@
     h3 {
       color: white;
     }
-    #scorecard-table {
+    .scorecard-table {
       width: 100%;
       margin: 20px 0;
       border-collapse: collapse;
@@ -28,27 +28,27 @@
       color: #ffffff;
     }
     /* Header row styling: dark background with uppercase, spaced text */
-    #scorecard-table thead tr {
+    .scorecard-table thead tr {
       background-color: #2a2a2a;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
     /* Header and cell padding, with subtle borders */
-    #scorecard-table th,
-    #scorecard-table td {
+    .scorecard-table th,
+    .scorecard-table td {
       padding: 12px 15px;
       border: 1px solid #444;
       text-align: center;
     }
     /* Zebra-striping for table rows */
-    #scorecard-table tbody tr:nth-child(even) {
+    .scorecard-table tbody tr:nth-child(even) {
       background-color: #333333;
     }
-    #scorecard-table tbody tr:nth-child(odd) {
+    .scorecard-table tbody tr:nth-child(odd) {
       background-color: #2e2e2e;
     }
     /* Hover effect for rows */
-    #scorecard-table tbody tr:hover {
+    .scorecard-table tbody tr:hover {
       background-color: #555555;
       cursor: pointer;
     }
@@ -62,14 +62,38 @@
       text-align: center;
       min-width: 120px;
     }
-    /* Decrease table cell padding for mobile screens */
-@media (max-width: 768px) {
-  #scorecard-table th,
-  #scorecard-table td {
-    padding: 6px !important; /* or any smaller value you like */
-  }
-}
 
+    /* ----------------------------
+       DESKTOP (>= 769px) STYLING
+       ---------------------------- */
+    @media (min-width: 769px) {
+      .scorecard-table {
+        table-layout: fixed;
+      }
+      /* Force all 10 columns to 10% so they line up nicely */
+      .scorecard-table th,
+      .scorecard-table td {
+        width: 10%;
+      }
+    }
+
+    /* ----------------------------
+       MOBILE (<= 768px) STYLING
+       ---------------------------- */
+    @media (max-width: 768px) {
+      .scorecard-table {
+        table-layout: auto;
+      }
+      .scorecard-table th,
+      .scorecard-table td {
+        width: auto;
+      }
+      /* Fix width for the last column ("Out" or "In") */
+      .scorecard-table th:last-child,
+      .scorecard-table td:last-child {
+        width: 80px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -115,9 +139,10 @@
   <div class="container">
     <!-- Stats header row -->
     <div class="row align-items-center py-3">
-      <!-- Left side: Player name -->
+      <!-- Left side: Player name and handicap -->
       <div class="col-12 col-md-6 text-md-left">
         <h2 id="player-name" class="m-0">Player Name</h2>
+        <h4 id="player-handicap" class="m-0"></h4>
       </div>
       <!-- Right side: Stats card -->
       <div class="col-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-3 mt-md-0">
@@ -128,17 +153,24 @@
       </div>
     </div>
     
-    
-    <!-- Single table with front 9 and back 9 -->
-    <table id="scorecard-table">
+    <!-- Front Nine Table -->
+    <table id="front-nine-table" class="scorecard-table" style="margin-bottom: 30px;">
       <thead>
-        <!-- Row 1: front 9 holes + "Out" -->
         <tr>
-          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>Out</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>Out</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Row 2: Par for holes 1-9 + Par total (Out) -->
+        <!-- Row: Par for holes 1-9 + Par total (Out) -->
         <tr>
           <td id="par1"></td>
           <td id="par2"></td>
@@ -151,7 +183,7 @@
           <td id="par9"></td>
           <td id="parOut"></td>
         </tr>
-        <!-- Row 3: Score for holes 1-9 + Score total (Out) -->
+        <!-- Row: Score for holes 1-9 + Score total (Out) -->
         <tr>
           <td id="score1"></td>
           <td id="score2"></td>
@@ -164,7 +196,7 @@
           <td id="score9"></td>
           <td id="scoreOut"></td>
         </tr>
-        <!-- Row 4: Points for holes 1-9 + Points total (Out) -->
+        <!-- Row: Points for holes 1-9 + Points total (Out) -->
         <tr>
           <td id="points1"></td>
           <td id="points2"></td>
@@ -177,12 +209,27 @@
           <td id="points9"></td>
           <td id="pointsOut"></td>
         </tr>
+      </tbody>
+    </table>
 
-        <!-- Row 5: back 9 holes + "In" -->
+    <!-- Back Nine Table -->
+    <table id="back-nine-table" class="scorecard-table" style="margin-top: 30px;">
+      <thead>
         <tr>
-          <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>In</th>
+          <th>10</th>
+          <th>11</th>
+          <th>12</th>
+          <th>13</th>
+          <th>14</th>
+          <th>15</th>
+          <th>16</th>
+          <th>17</th>
+          <th>18</th>
+          <th>In</th>
         </tr>
-        <!-- Row 6: Par for holes 10-18 + Par total (In) -->
+      </thead>
+      <tbody>
+        <!-- Row: Par for holes 10-18 + Par total (In) -->
         <tr>
           <td id="par10"></td>
           <td id="par11"></td>
@@ -195,7 +242,7 @@
           <td id="par18"></td>
           <td id="parIn"></td>
         </tr>
-        <!-- Row 7: Score for holes 10-18 + Score total (In) -->
+        <!-- Row: Score for holes 10-18 + Score total (In) -->
         <tr>
           <td id="score10"></td>
           <td id="score11"></td>
@@ -208,7 +255,7 @@
           <td id="score18"></td>
           <td id="scoreIn"></td>
         </tr>
-        <!-- Row 8: Points for holes 10-18 + Points total (In) -->
+        <!-- Row: Points for holes 10-18 + Points total (In) -->
         <tr>
           <td id="points10"></td>
           <td id="points11"></td>
@@ -253,7 +300,8 @@
     /****************************************************
      * 2) Fetch the Google Sheet data for the scorecard
      *    Each row = 1 hole, with columns:
-     *    E (index 4) = hole #, F (index 5) = par, I (index 8) = score, M (index 12) = points
+     *    E (index 4) = hole #, F (index 5) = par,
+     *    I (index 8) = score, M (index 12) = points
      ****************************************************/
     const sheetId = '1r9BoqxzH4PvahkPqF9yK0IoSDJsv4iOhUrQfm28k1qg';
     const fetchUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(playerName)}`;
@@ -319,6 +367,11 @@
           const diff = scr - par;
           const scoreCell = document.getElementById(`score${holeNumber}`);
           if (!scoreCell) return;
+          
+          // Reset any previous styling
+          scoreCell.style.backgroundColor = "";
+          scoreCell.style.color = "";
+
           if (diff === 0) {
             scoreCell.style.backgroundColor = "white";
             scoreCell.style.color = "black";
@@ -371,6 +424,30 @@
         document.getElementById("total-points").textContent = playerPoints;
       })
       .catch(err => console.error("Error fetching leaderboard data:", err));
+
+    /****************************************************
+     * 5) Fetch handicap data from the "Handicaps" sheet
+     *    (Assumes handicap data is in a sheet named "Handicaps"
+     *     with names in column A and handicaps in column B)
+     ****************************************************/
+    const handicapSheetName = 'Handicaps';
+    const handicapUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(handicapSheetName)}`;
+
+    fetch(handicapUrl)
+      .then(response => response.text())
+      .then(text => {
+        const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\((.*)\);/)[1]);
+        const rows = json.table.rows;
+        let handicap = "N/A";
+        rows.forEach(r => {
+          // Compare names case-insensitively (assuming name is in column A and handicap in column B)
+          if (r.c[0] && r.c[0].v.trim().toLowerCase() === playerName.trim().toLowerCase()) {
+            handicap = r.c[1] ? r.c[1].v : "N/A";
+          }
+        });
+        document.getElementById("player-handicap").textContent = `Handicap: ${handicap}`;
+      })
+      .catch(err => console.error("Error fetching handicap data:", err));
   </script>
 </body>
 </html>
