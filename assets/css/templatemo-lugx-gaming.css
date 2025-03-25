@@ -386,15 +386,8 @@ Header Style
   letter-spacing: .25px;
 }
 
-.header-area .main-nav .nav li:last-child a {
-  background-color: #0071f8;
-  text-transform: uppercase;
-  font-weight: 500;
-}
 
-.header-area .main-nav .nav li:last-child:hover a {
-  background-color: #0071f8;
-}
+
 
 .header-area .main-nav .nav li:hover a {
   background-color: rgba(255, 255, 255, 0.10);
@@ -593,7 +586,7 @@ Header Style
   }
   .header-area .nav li:last-child a {
     background-color: transparent !important;
-    font-weight: 300 !important;
+   
     text-transform: capitalize !important;
   }
   .header-area {
