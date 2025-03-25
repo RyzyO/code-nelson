@@ -286,8 +286,8 @@ Header Style
 
 .background-header {
   background-color: #0071f8 !important;
-  border-radius: 0px 0px 25px 25px;
-  height: 80px!important;
+  border-radius: 0px 0px 0px 0px;
+  height: 85px!important;
   position: fixed!important;
   top: 0!important;
   left: 0;
