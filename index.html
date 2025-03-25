@@ -55,6 +55,10 @@ https://templatemo.com/tm-589-lugx-gaming
   
 }
 
+#hi {
+  font-size: 20px;
+  color: #ffffff;
+}
 
 
 </style>
@@ -117,9 +121,9 @@ https://templatemo.com/tm-589-lugx-gaming
         <div class="col-lg-6 align-self-center">
           <div class="caption header-text">
 			 
-           
-     <h2 id="user-name">Welcome</h2>
- <h6>Welcome to our 25th Annual Road Trip.</h6> <h6>This year we head back south to Nelson Bay GC. </h6>
+            <h6 id="hacker-number"></h6>
+     <h2 id="user-name"></h2>
+ <h6>Welcome to our 25th Annual Road Trip.</h6><br> <h6>This year we head back south to Nelson Bay GC. </h6>
            
           </div>
         </div>
@@ -323,7 +327,7 @@ function getHackerNumber(user) {
     onValue(hackerRef, (snapshot) => {
         const hackerNumber = snapshot.val();
         if (hackerNumber) {
-            document.getElementById('hacker-number').textContent = '  ' + hackerNumber + '';
+            document.getElementById('hacker-number').textContent = "G'day, hacker no. " + '' + hackerNumber + '';
         } else {
             document.getElementById('hacker-number').textContent = ' (Hackers number not assigned yet)';
         }
@@ -428,8 +432,9 @@ auth.onAuthStateChanged((user) => {
         document.getElementById('countdown').classList.add('light-text');
     }
 
-    toggleSettingsPanel(); // Close settings panel after selection
-}
+    
+
+  }
 
     </script>
 
