@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>Schedule</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="assets/css/templatemo-lugx-gaming.css">
+  <link rel="stylesheet" href="assets/css/owl.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+</head>
+
+<body>
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <a href="index.html" class="logo">
+              <img src="assets/images/logo.png" alt="" style="width: 158px;">
+            </a>
+            <ul class="nav">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="register.html">Register</a></li>
+              <li><a href="course.html">Venue</a></li>
+              <li><a href="payment.html">Payment</a></li>
+              <li><a href="podcast.html">Podcast</a></li>
+              <li><a href="schedule.html" class="active">Schedule</a></li>
+              <li><a href="honour-roll.html">Honour Roll</a></li>
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <!-- ***** Page Heading Start ***** -->
+  <div class="page-heading header-text">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h3>Schedule</h3>
+          <span class="breadcrumb" id="user-name">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Page Heading End ***** -->
+
+  <!-- ***** Schedule Section Start ***** -->
+  <section class="section trending">
+    <div class="container">
+
+      <div class="section-heading text-center">
+        <h6>Hackers Cup 2025</h6>
+        <h2>Event Schedule</h2>
+        <a href="hackers.ics" class="main-button">Save to Calendar</a>
+      </div>
+
+      <div class="row">
+
+        <!-- Friday Card -->
+        <div class="col-lg-4 col-md-6">
+          <div class="item wow fadeInUp" data-wow-delay="0.2s">
+            <div class="thumb">
+             
+            </div>
+            <div class="down-content">
+              <span class="category">Friday 8th August</span>
+              <h4>Troll Plate Skins</h4>
+              <p><strong>Registration:</strong> 10:30am (Memorabilia Packs)</p>
+              <p><strong>Shotgun Start:</strong> 11:30am</p>
+              <p><strong>BBQ Lunch:</strong> Halfway House</p>
+              <p><strong>Tee:</strong> <span id="fri-data">Loading...</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saturday Card -->
+        <div class="col-lg-4 col-md-6">
+          <div class="item wow fadeInUp" data-wow-delay="0.4s">
+            <div class="thumb">
+             
+            </div>
+            <div class="down-content">
+              <span class="category">Saturday 9th August</span>
+              <h4>Stableford & Team Pink Ball</h4>
+              <p><strong>Breakfast:</strong> 6:30am - 7:30am (Captains collect envelopes)</p>
+              <p><strong>Shotgun Start:</strong> 8:15am</p>
+              <p><strong>Tee:</strong> <span id="sat-data">Loading...</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sunday Card -->
+        <div class="col-lg-4 col-md-6">
+          <div class="item wow fadeInUp" data-wow-delay="0.6s">
+            <div class="thumb">
+           
+            </div>
+            <div class="down-content">
+              <span class="category">Sunday 10th August</span>
+              <h4>Ambrose</h4>
+              <p><strong>Breakfast:</strong> 6:30am - 7:30am (Captains collect envelopes)</p>
+              <p><strong>Shotgun Start:</strong> 8:15am</p>
+              <p><strong>Tee:</strong> <span id="sun-data">Loading...</span></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-5">
+        <button id="sign-out-btn" class="btn btn-primary">Sign Out</button>
+      </div>
+
+    </div>
+  </section>
+  <!-- ***** Schedule Section End ***** -->
+
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>Copyright &copy; 2025 Riley Oakes. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="assets/js/isotope.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/counter.js"></script>
+  <script src="assets/js/custom.js"></script>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYat6m3-Lv46vfm6xcHLjTjRDq7NdCxAk",
+      authDomain: "hackers-cup.firebaseapp.com",
+      databaseURL: "https://hackers-cup-default-rtdb.firebaseio.com",
+      projectId: "hackers-cup",
+      storageBucket: "hackers-cup.appspot.com",
+      messagingSenderId: "765736070872",
+      appId: "1:765736070872:web:86a51c41916e7af75631ad",
+      measurementId: "G-6E1M14F510"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase();
+    const auth = getAuth(app);
+
+    function getDisplayName(user) {
+      const userRef = ref(database, `users/${user.uid}/displayName`);
+      onValue(userRef, (snapshot) => {
+        const displayName = snapshot.val();
+        if (displayName) {
+          document.getElementById('user-name').textContent = displayName;
+        }
+      });
+    }
+
+    function getFridaySchedule(user) {
+      const friRef = ref(database, `users/${user.uid}/fri`);
+      onValue(friRef, (snapshot) => {
+        document.getElementById('fri-data').textContent = snapshot.val() || 'Not Assigned';
+      });
+    }
+
+    function getSaturdaySchedule(user) {
+      const satRef = ref(database, `users/${user.uid}/sat`);
+      onValue(satRef, (snapshot) => {
+        document.getElementById('sat-data').textContent = snapshot.val() || 'Not Assigned';
+      });
+    }
+
+    function getSundaySchedule(user) {
+      const sunRef = ref(database, `users/${user.uid}/sun`);
+      onValue(sunRef, (snapshot) => {
+        document.getElementById('sun-data').textContent = snapshot.val() || 'Not Assigned';
+      });
+    }
+
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+      } else {
+        getDisplayName(user);
+        getFridaySchedule(user);
+        getSaturdaySchedule(user);
+        getSundaySchedule(user);
+      }
+    });
+
+    document.getElementById('sign-out-btn').addEventListener('click', () => {
+      auth.signOut()
+        .then(() => {
+          window.location.href = 'login.html';
+        })
+        .catch((error) => {
+          console.error('Sign Out Error', error);
+        });
+    });
+  </script>
+
+</body>
+</html>
