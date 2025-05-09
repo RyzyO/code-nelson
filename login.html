@@ -10,8 +10,27 @@
 <link rel="apple-touch-startup-image" href="splash.png">
     <link rel="manifest" href="site.webmanifest" />
     <title>Hackers Cup</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="site.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="apple-touch-startup-image" href="splash.png">
+    <title>Hackers Cup</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/templatemo-lugx-gaming.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
     <style>
-        /* Resetting default margin and padding */
         * {
             margin: 0;
             padding: 0;
@@ -104,6 +123,40 @@
 </head>
 
 <body>
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="index.html" class="logo">
+              <img src="assets/images/logo.png" alt="" style="width: 158px;">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li><a href="index.html" class="active">Home</a></li>
+              <li><a href="register.html">Register</a></li>
+              <li><a href="venue.html">Venue</a></li>
+              <li><a href="payment.html">Payment</a></li>
+              <li><a href="podcast.html">Podcast</a></li>
+              <li><a href="schedule.html">Schedule</a></li>
+              <li><a href="honour-roll.html">Honour Roll</a></li>
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+<body>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
@@ -186,6 +239,14 @@
         </div>
         <p id="error-message"></p>
     </div>
+
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>Copyright &copy; 2025 Riley Oakes. All rights reserved.&nbsp; &nbsp;<a rel="nofollow" href="https://templatemo.com" target="_blank">&nbsp;</a></p>
+      </div>
+    </div>
+  </footer>
 </body>
 
 </html>
