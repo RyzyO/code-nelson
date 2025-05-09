@@ -28,18 +28,10 @@
     https://templatemo.com/tm-589-lugx-gaming
     -->
     <style>
-      #course-img1 {
-        width: 260px;
-        height: 130px;
-      }
-
-      #course-img2 {
-        width: 260px;
-        height: 130px;
-      }
-
+      /* Style for course flyover images */
+      #course-img1,
+      #course-img2,
       #course-img3 {
-        width: 260px;
         height: 130px;
       }
 
@@ -47,7 +39,12 @@
         width: 260px;
       }
 
-      #hi {
+      #course-img1, #course-img2, #course-img3, #course-img4 {
+        width: 100%; /* Make images responsive */
+ height: auto; /* Maintain aspect ratio */
+ display: block; /* Remove extra space below image */
+      }
+      #hi { 
         font-size: 20px;
         color: #ffffff;
       }
