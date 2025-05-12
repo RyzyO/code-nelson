@@ -31,12 +31,14 @@
               </a>
               <!-- Navigation Links -->
               <ul class="nav">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="shop.html">Our Shop</a></li>
-                <li><a href="product-details.html" class="active">Product Details</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="#">Sign In</a></li>
-              </ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="register.html">Register</a></li>
+              <li><a href="venue.html">Venue</a></li>
+              <li><a href="payment.html" class="active">Payment</a></li>
+              <li><a href="podcast.html">Podcast</a></li>
+              <li><a href="schedule.html">Schedule</a></li>
+              <li><a href="honour-roll.html">Honour Roll</a></li>
+            </ul>
               <a class="menu-trigger">
                 <span>Menu</span>
               </a>
@@ -64,7 +66,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6 align-self-center">
-            <h4>Saturday Stableford</h4>
+            <h4>Scoring Will Appear Here Once Ready</h4>
             <form id="scorecard-form" action="#">
               <button id="open-scorecard-btn" type="submit">OPEN YOUR SCORECARD</button>
             </form>
@@ -180,7 +182,7 @@
             // Wrap the sheet name in single quotes.
             // For example, if userDisplayName is "Alice", the range parameter becomes: 'Alice'!A1
             const rangeParam = encodeURIComponent("'" + userDisplayName + "'!A1");
-            const sheetUrl = `https://docs.google.com/spreadsheets/d/1r9BoqxzH4PvahkPqF9yK0IoSDJsv4iOhUrQfm28k1qg/edit?range=${rangeParam}`;
+            const sheetUrl = #;
             window.open(sheetUrl, "_blank");
           } else {
             alert("Display name not set yet. Please try again shortly.");
