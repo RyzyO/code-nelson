@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Internal Use Only</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="templatemo-lugx-gaming.css" rel="stylesheet" />
+  <link href="animate.css" rel="stylesheet" />
+  <link href="fontawesome.css" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0071f8, #1e1e1e);
+      font-family: 'Poppins', sans-serif;
+    }
+    .signup-container {
+      max-width: 400px;
+      margin: 100px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0px 0px 15px rgba(0,0,0,0.15);
+    }
+    .signup-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0071f8;
+    }
+    .signup-container input {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      font-size: 14px;
+    }
+    .signup-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0071f8;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .signup-container button:hover {
+      background-color: #005dc5;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container animated fadeInDown">
+    <h2>Internal Use Only</h2>
+    <input type="text" id="displayName" placeholder="Full Name" required />
+    <input type="email" id="email" placeholder="Email Address" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="signUp()">Create Account</button>
+    <p id="message" style="margin-top: 15px; color: red;"></p>
+  </div>
+
+  <script>
+   const firebaseConfig = {
+        apiKey: "AIzaSyAYat6m3-Lv46vfm6xcHLjTjRDq7NdCxAk",
+        authDomain: "hackers-cup.firebaseapp.com",
+        databaseURL: "https://hackers-cup-default-rtdb.firebaseio.com",
+        projectId: "hackers-cup",
+        storageBucket: "hackers-cup.appspot.com",
+        messagingSenderId: "765736070872",
+        appId: "1:765736070872:web:86a51c41916e7af75631ad",
+        measurementId: "G-6E1M14F510"
+      };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    const firestore = firebase.firestore();
+
+    function signUp() {
+      const name = document.getElementById('displayName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('message');
+      msg.textContent = '';
+
+      if (!name || !email || !password) {
+        msg.textContent = 'All fields are required.';
+        return;
+      }
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const uid = userCredential.user.uid;
+
+          // Realtime Database
+          db.ref('users/' + uid).set({
+            displayName: name,
+            hackerNumber: "",
+            fri: "",
+            sat: "",
+            sun: ""
+          });
+
+          // Firestore
+          firestore.collection('users').doc(uid).set({
+            displayName: name,
+            amtOutstanding: "$650",
+            financialStatus: "Not Paid"
+          });
+
+          msg.style.color = 'green';
+          msg.textContent = 'Account created successfully!';
+        })
+        .catch((error) => {
+          msg.textContent = error.message;
+        });
+    }
+  </script>
+</body>
+</html>
