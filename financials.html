@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Financials</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="templatemo-lugx-gaming.css" rel="stylesheet" />
+  <link href="animate.css" rel="stylesheet" />
+  <link href="fontawesome.css" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0071f8, #1e1e1e);
+      font-family: 'Poppins', sans-serif;
+      color: #1e1e1e;
+    }
+    .container {
+      max-width: 600px;
+      margin: 80px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    }
+    h2 {
+      text-align: center;
+      color: #0071f8;
+      margin-bottom: 30px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0071f8;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005dc5;
+    }
+    .user-result {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+    .user-result:hover {
+      background: #f0f0f0;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container animated fadeInDown">
+    <h2>Update Financial Status</h2>
+
+    <input type="text" id="search" placeholder="Search by display name..." onkeyup="searchUsers()" />
+    <div id="results"></div>
+
+    <div id="editForm" class="hidden">
+      <h4 id="selectedName"></h4>
+      <input type="text" id="amtOutstanding" placeholder="Amount Outstanding" />
+      <select id="financialStatus">
+        <option value="Not Paid">Not Paid</option>
+        <option value="Partially Paid">Partially Paid</option>
+        <option value="Fully Paid">Fully Paid</option>
+      </select>
+      <button onclick="updateUser()">Update</button>
+      <p id="updateMessage" style="margin-top: 10px;"></p>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+            apiKey: "AIzaSyAYat6m3-Lv46vfm6xcHLjTjRDq7NdCxAk",
+            authDomain: "hackers-cup.firebaseapp.com",
+            databaseURL: "https://hackers-cup-default-rtdb.firebaseio.com",
+            projectId: "hackers-cup",
+            storageBucket: "hackers-cup.appspot.com",
+            messagingSenderId: "765736070872",
+            appId: "1:765736070872:web:86a51c41916e7af75631ad",
+            measurementId: "G-6E1M14F510"
+        };
+    firebase.initializeApp(firebaseConfig);
+    const firestore = firebase.firestore();
+
+    let selectedUserId = null;
+
+    async function searchUsers() {
+      const query = document.getElementById('search').value.trim().toLowerCase();
+      const resultsContainer = document.getElementById('results');
+      resultsContainer.innerHTML = '';
+      document.getElementById('editForm').classList.add('hidden');
+
+      if (!query) return;
+
+      const snapshot = await firestore.collection('users').get();
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.displayName && data.displayName.toLowerCase().includes(query)) {
+          const div = document.createElement('div');
+          div.className = 'user-result';
+          div.textContent = data.displayName;
+          div.onclick = () => loadUser(doc.id, data.displayName, data);
+          resultsContainer.appendChild(div);
+        }
+      });
+    }
+
+    function loadUser(uid, name, data) {
+      selectedUserId = uid;
+      document.getElementById('selectedName').textContent = `Editing: ${name}`;
+      document.getElementById('amtOutstanding').value = data.amtOutstanding || '';
+      document.getElementById('financialStatus').value = data.financialStatus || 'Not Paid';
+      document.getElementById('editForm').classList.remove('hidden');
+      document.getElementById('updateMessage').textContent = '';
+    }
+
+    function updateUser() {
+      const amt = document.getElementById('amtOutstanding').value;
+      const status = document.getElementById('financialStatus').value;
+      const msg = document.getElementById('updateMessage');
+
+      firestore.collection('users').doc(selectedUserId).update({
+        amtOutstanding: amt,
+        financialStatus: status
+      }).then(() => {
+        msg.style.color = 'green';
+        msg.textContent = 'Update successful!';
+      }).catch(err => {
+        msg.style.color = 'red';
+        msg.textContent = err.message;
+      });
+    }
+  </script>
+</body>
+</html>
