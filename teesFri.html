@@ -96,7 +96,7 @@
       try {
         const res = await fetch(SHEET_CSV_URL);
         const csv = await res.text();
-        const rows = csv.trim().split("\\n").slice(1);
+        const rows = csv.trim().split("\n").slice(1);
         allPlayers = rows.map(row => row.split(",")).filter(columns => columns[20]?.trim().toLowerCase() === "yes").map(columns => columns[1]?.trim()).filter(name => name);
         availablePlayers = [...allPlayers];
         console.log("Eligible players loaded from sheet.");
