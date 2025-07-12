@@ -90,25 +90,21 @@
 
     let allPlayers = [], availablePlayers = [], selectedPlayers = [], teeSheetData = [];
     let currentDocId = null;
+    let editingIndex = null;
 
     async function loadPlayers() {
-  try {
-    const res = await fetch(SHEET_CSV_URL);
-    const csv = await res.text();
-    const rows = csv.trim().split("\n").slice(1);
-    allPlayers = rows
-      .map(row => row.split(","))
-      .filter(columns => columns[20]?.trim().toLowerCase() === "yes") // Check column U
-      .map(columns => columns[1]?.trim()) // Name is column B (index 1)
-      .filter(name => name); // Remove empty names
-    availablePlayers = [...allPlayers];
-    console.log("Eligible players loaded from sheet.");
-  } catch (err) {
-    console.error("Error loading sheet:", err);
-    alert("Failed to load Google Sheet.");
-  }
-}
-
+      try {
+        const res = await fetch(SHEET_CSV_URL);
+        const csv = await res.text();
+        const rows = csv.trim().split("\\n").slice(1);
+        allPlayers = rows.map(row => row.split(",")).filter(columns => columns[20]?.trim().toLowerCase() === "yes").map(columns => columns[1]?.trim()).filter(name => name);
+        availablePlayers = [...allPlayers];
+        console.log("Eligible players loaded from sheet.");
+      } catch (err) {
+        console.error("Error loading sheet:", err);
+        alert("Failed to load Google Sheet.");
+      }
+    }
 
     async function loadFromFirestore() {
       try {
@@ -125,12 +121,13 @@
       }
     }
 
-    window.openModal = function() {
-      if (availablePlayers.length === 0) return alert("No players available. Please load from sheet.");
-      selectedPlayers = [];
+    window.openModal = function(group = null, index = null) {
+      selectedPlayers = group?.players ? [...group.players] : [];
       document.getElementById('searchInput').value = '';
+      editingIndex = index;
       renderPlayerList();
       populateHoles();
+      document.getElementById('holeSelect').value = group?.hole || document.getElementById('holeSelect').value;
       document.getElementById('groupModal').style.display = 'block';
     }
 
@@ -144,7 +141,7 @@
       list.innerHTML = '';
       const groupedPlayers = teeSheetData.flatMap(group => group.players);
       availablePlayers.forEach(player => {
-        if (player.toLowerCase().includes(search) && !groupedPlayers.includes(player)) {
+        if (player.toLowerCase().includes(search) && (!groupedPlayers.includes(player) || selectedPlayers.includes(player))) {
           const div = document.createElement('div');
           div.className = 'player-option';
           if (selectedPlayers.includes(player)) div.classList.add('selected');
@@ -166,21 +163,27 @@
     }
 
     function populateHoles() {
-  const select = document.getElementById('holeSelect');
-  select.innerHTML = '';
-  for (let i = 19; i <= 27; i++) {
-    select.innerHTML += `<option value="${i}">${i}</option>`;
-    select.innerHTML += `<option value="${i}A">${i}A</option>`;
-    select.innerHTML += `<option value="${i}B">${i}B</option>`;
-  }
-}
-
+      const select = document.getElementById('holeSelect');
+      select.innerHTML = '';
+      for (let i = 19; i <= 27; i++) {
+        select.innerHTML += `<option value="${i}">${i}</option>`;
+        select.innerHTML += `<option value="${i}A">${i}A</option>`;
+        select.innerHTML += `<option value="${i}B">${i}B</option>`;
+      }
+    }
 
     window.saveGroup = function() {
       if (selectedPlayers.length === 0) return alert("Select at least one player.");
       const hole = document.getElementById('holeSelect').value;
-      teeSheetData.push({ hole, players: [...selectedPlayers] });
-      availablePlayers = availablePlayers.filter(p => !selectedPlayers.includes(p));
+
+      if (editingIndex !== null) {
+        teeSheetData[editingIndex] = { hole, players: [...selectedPlayers] };
+        editingIndex = null;
+      } else {
+        teeSheetData.push({ hole, players: [...selectedPlayers] });
+      }
+
+      availablePlayers = allPlayers.filter(p => !teeSheetData.flatMap(g => g.players).includes(p));
       renderTeeSheet();
       closeModal();
       syncToFirestore();
@@ -194,10 +197,19 @@
         tr.innerHTML = `
           <td>${group.hole}</td>
           ${[0, 1, 2, 3].map(i => `<td>${group.players[i] || ''}</td>`).join('')}
-          <td><button class="btn btn-sm btn-danger" onclick="deleteGroup(${index})">🗑️</button></td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" onclick="editGroup(${index})">✏️</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGroup(${index})">🗑️</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    window.editGroup = function(index) {
+      const group = teeSheetData[index];
+      availablePlayers.push(...group.players);
+      openModal(group, index);
     }
 
     window.deleteGroup = function(index) {
