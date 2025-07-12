@@ -92,18 +92,23 @@
     let currentDocId = null;
 
     async function loadPlayers() {
-      try {
-        const res = await fetch(SHEET_CSV_URL);
-        const csv = await res.text();
-        const rows = csv.trim().split("\n").slice(1);
-        allPlayers = rows.map(row => row.split(",")[1]?.trim()).filter(name => name);
-        availablePlayers = [...allPlayers];
-        console.log("Players loaded from sheet.");
-      } catch (err) {
-        console.error("Error loading sheet:", err);
-        alert("Failed to load Google Sheet.");
-      }
-    }
+  try {
+    const res = await fetch(SHEET_CSV_URL);
+    const csv = await res.text();
+    const rows = csv.trim().split("\n").slice(1);
+    allPlayers = rows
+      .map(row => row.split(","))
+      .filter(columns => columns[20]?.trim().toLowerCase() === "yes") // Check column U
+      .map(columns => columns[1]?.trim()) // Name is column B (index 1)
+      .filter(name => name); // Remove empty names
+    availablePlayers = [...allPlayers];
+    console.log("Eligible players loaded from sheet.");
+  } catch (err) {
+    console.error("Error loading sheet:", err);
+    alert("Failed to load Google Sheet.");
+  }
+}
+
 
     async function loadFromFirestore() {
       try {
@@ -161,12 +166,15 @@
     }
 
     function populateHoles() {
-      const select = document.getElementById('holeSelect');
-      select.innerHTML = '';
-      for (let i = 1; i <= 18; i++) {
-        select.innerHTML += `<option value="${i}">Hole ${i}</option>`;
-      }
-    }
+  const select = document.getElementById('holeSelect');
+  select.innerHTML = '';
+  for (let i = 19; i <= 27; i++) {
+    select.innerHTML += `<option value="${i}">${i}</option>`;
+    select.innerHTML += `<option value="${i}A">${i}A</option>`;
+    select.innerHTML += `<option value="${i}B">${i}B</option>`;
+  }
+}
+
 
     window.saveGroup = function() {
       if (selectedPlayers.length === 0) return alert("Select at least one player.");
