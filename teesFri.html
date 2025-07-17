@@ -72,6 +72,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
 
     const firebaseConfig = {
       apiKey: "AIzaSyAYat6m3-Lv46vfm6xcHLjTjRDq7NdCxAk",
@@ -85,6 +87,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const rtdb = getDatabase(app);
 
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1yJdEAaQWqbTdQTnY-BwFN6hnUbh-74zq4L8Dj1spDG8/export?format=csv&gid=912567431";
 
@@ -172,7 +175,7 @@
       }
     }
 
-    window.saveGroup = function() {
+    window.saveGroup = async function () {
       if (selectedPlayers.length === 0) return alert("Select at least one player.");
       const hole = document.getElementById('holeSelect').value;
 
@@ -184,6 +187,36 @@
       }
 
       availablePlayers = allPlayers.filter(p => !teeSheetData.flatMap(g => g.players).includes(p));
+
+      // Save to Realtime DB
+     for (const playerName of selectedPlayers) {
+  try {
+    const usersRef = ref(rtdb, 'users');
+    const snapshot = await get(usersRef);
+    if (snapshot.exists()) {
+      let found = false;
+      const usersData = snapshot.val();
+      for (const uid in usersData) {
+        const user = usersData[uid];
+        if (user && user.displayName === playerName) {
+          await set(ref(rtdb, `users/${uid}/fri`), hole);
+          console.log(`Saved ${hole} to users/${uid}/fri for ${playerName}`);
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        console.warn(`Player "${playerName}" not found via displayName under any UID.`);
+      }
+    } else {
+      console.warn("No users found in Realtime Database.");
+    }
+  } catch (err) {
+    console.error(`Error saving tee for ${playerName} to Realtime DB:`, err);
+  }
+}
+
+
       renderTeeSheet();
       closeModal();
       syncToFirestore();
