@@ -97,38 +97,30 @@
     let editingIndex = null;
 
     async function loadPlayers() {
-      try {
-        const res = await fetch(SHEET_CSV_URL);
-        const csv = await res.text();
-        // Use PapaParse to parse CSV
-        const parsed = Papa.parse(csv, { header: false, skipEmptyLines: true });
-        const rows = parsed.data.slice(1); // skip header
-        allPlayers = [];
-        availablePlayers = [];
-        rows.forEach((columns, idx) => {
-          const name = columns[1]?.trim();
-          const eligible = columns[20]?.trim().toLowerCase() === "yes";
-          if (!name) {
-            console.log(`Excluded player: [No Name] - Reason: Missing name in row ${idx + 2}`);
-            return;
-          }
-          if (!eligible) {
-            console.log(`Excluded player: ${name} - Reason: Not eligible (column 21 != "yes")`);
-            return;
-          }
-          allPlayers.push(name);
-        });
-        availablePlayers = [...allPlayers];
-        console.log("Eligible players loaded from sheet.");
-      } catch (err) {
-        console.error("Error loading sheet:", err);
-        alert("Failed to load Google Sheet.");
-      }
-    }
+  allPlayers = [
+    "Brendan Oakes", "Andrew Murray", "Noel Jago", "Peter Keen", "Martyn Budden",
+    "Scott Anderson", "Ashley Oakes", "Matt Jackson", "Phil Carney", "Chris Chilcott",
+    "Damien Starcic", "Daniel Graham", "Adam Paton", "Matt Rowan", "Steve Press",
+    "Steve Walters", "Darryn Rooks", "Josh Fryer", "Scott Austin", "Andrew Murrie",
+    "Craig Broderick", "Nick Brady", "Bill Pearce", "Matthew Zibert", "Mark Lever",
+    "Bruce Brown", "Ernie Zibert", "John Winter", "Joe Pajeska", "Chris Waters",
+    "Brad Grant", "Felix Lewandowski", "Andrew Graham", "Glenn Lyall", "Glenn Palmer",
+    "Brad Rogers", "Paul Murray", "Daniel Bennett", "Mark Anderson", "Michael Lagudi",
+    "Nick Williams", "Dave Dollard", "Mark Leaney", "Glen Duley", "Gavin Blick",
+    "Luke OBrien", "Justinn Curan", "Antony Seel", "Jeff Hawkins", "David Simpson",
+    "Anker Christensen", "Grant Pelley", "Riley Oakes", "Joel Shepherd", "Sam Edwards",
+    "Ben Wood", "Jordan Whitehorn", "Derek Shepherd", "Paul Zepernick", "Brad Spurway",
+    "Tamas Mendik", "Joe Foia", "Matt Kennerson", "Glenn Hickey", "Greg Gomes",
+    "Edward OSullivan", "Willie Cooper", "Ray Vella", "Lachlan Hill", "John OToole",
+    "Charlie Sharp", "Ryan Nancarrow"
+  ];
+  availablePlayers = [...allPlayers];
+  console.log("Players loaded successfully.");
+}
 
     async function loadFromFirestore() {
       try {
-        const q = query(collection(db, "teeSheetsFri"), orderBy("createdAt", "desc"), limit(1));
+        const q = query(collection(db, "teeSheets"), orderBy("createdAt", "desc"), limit(1));
         const snapshot = await getDocs(q);
         if (!snapshot.empty) {
           const docSnap = snapshot.docs[0];
@@ -186,7 +178,7 @@
   const select = document.getElementById('holeSelect');
   select.innerHTML = '';
 
-  const customHoles = ['1A', '1B', '2A', '2B', '3A', '3B', '4A', '4B', '5', '6', '7A', '7B', '8', '24', '25'];
+  const customHoles = ['1A', '1B', '2A', '2B', '3A', '3B', '4A', '4B', '5', '6', '7A', '7B', '8', '24', '25','9A', '9B', '19A', '19B', '20']
 
   customHoles.forEach(hole => {
     select.innerHTML += `<option value="${hole}">${hole}</option>`;
@@ -221,7 +213,7 @@
       for (const uid in usersData) {
         const user = usersData[uid];
         if (user && user.displayName === playerName) {
-          await set(ref(rtdb, `users/${uid}/fri`), hole);
+          await set(ref(rtdb, `users/${uid}/sat`), hole);
           console.log(`Saved ${hole} to users/${uid}/fri for ${playerName}`);
           found = true;
           break;
@@ -277,7 +269,7 @@
     async function syncToFirestore() {
       if (!currentDocId) return;
       try {
-        await updateDoc(doc(db, "teeSheetsFri", currentDocId), { groups: teeSheetData });
+        await updateDoc(doc(db, "teeSheets", currentDocId), { groups: teeSheetData });
       } catch (err) {
         console.error("Failed to update Firestore:", err);
       }
@@ -289,7 +281,7 @@
 
     window.saveToFirestore = function() {
       if (teeSheetData.length === 0) return alert("No groups to save.");
-      addDoc(collection(db, "teeSheetsFri"), {
+      addDoc(collection(db, "teeSheets"), {
         createdAt: new Date(),
         groups: teeSheetData
       })
